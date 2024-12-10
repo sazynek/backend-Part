@@ -1,0 +1,9 @@
+model productsCollections {
+    id                 String     @id @default(uuid())
+    allProductsUserBuy String[]   @default([])
+    updatedAt          DateTime   @updatedAt @map("updated_at")
+    createdAt          DateTime   @default(now()) @map("created_at")
+    products           Products[]
+
+    @@map("products_collections")
+}

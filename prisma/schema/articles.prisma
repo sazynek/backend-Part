@@ -1,7 +1,11 @@
 model Articles {
-    id       String  @id @default(uuid())
-    title
-    updatedAt      DateTime @updatedAt       @map("updated_at")
-    createdAt      DateTime @default(now())  @map("created_at")
+    id         String   @id @default(uuid())
+    title      String
+    publicDate String
+    imgUrl     String
+    author     String?
+    updatedAt  DateTime @updatedAt @map("updated_at")
+    createdAt  DateTime @default(now()) @map("created_at")
+
     @@map("articles")
 }

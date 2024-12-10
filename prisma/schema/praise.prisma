@@ -1,11 +1,10 @@
-model StatusProducts {
-    id       String  @id @default(uuid())
-    email    String  @unique
-    password String  @unique
-    name     String
+model Praise {
+    id           String     @id @default(uuid())
+    cost         Int
+    praiseStatus String     @map("praise_status")
+    updatedAt    DateTime   @updatedAt @map("updated_at")
+    createdAt    DateTime   @default(now()) @map("created_at")
+    Products     Products[]
 
-    supportComment String?
-    updatedAt      DateTime @updatedAt       @map("updated_at")
-    createdAt      DateTime @default(now())  @map("created_at")
-    @@map("status_products")
+    @@map("praise")
 }

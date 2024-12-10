@@ -1,11 +1,11 @@
 model Comments {
-    id       String  @id @default(uuid())
-    email    String  @unique
-    password String  @unique
-    name     String
+    id        String   @id @default(uuid())
+    content   String?
+    updatedAt DateTime @updatedAt @map("updated_at")
+    createdAt DateTime @default(now()) @map("created_at")
 
-    supportComment String?
-    updatedAt      DateTime @updatedAt       @map("updated_at")
-    createdAt      DateTime @default(now())  @map("created_at")
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
     @@map("comments")
 }
