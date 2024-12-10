@@ -1,0 +1,11 @@
+model Comments {
+    id       String  @id @default(uuid())
+    email    String  @unique
+    password String  @unique
+    name     String
+
+    supportComment String?
+    updatedAt      DateTime @updatedAt       @map("updated_at")
+    createdAt      DateTime @default(now())  @map("created_at")
+    @@map("comments")
+}
