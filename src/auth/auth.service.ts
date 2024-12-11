@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { UserService } from '../user/user.service'
 import { JwtService } from '@nestjs/jwt'
+import { Request, Response } from 'express'
 
 @Injectable()
 export class AuthService {
@@ -10,18 +11,17 @@ export class AuthService {
 		private readonly jwt: JwtService,
 	) {}
 
-	async login(createUserDto: CreateAuthDto) {
+	async login(createUserDto: CreateAuthDto, res: Response) {
 		const resultUser = await this.user.existUser(createUserDto)
 		if (!resultUser || resultUser === null || resultUser === undefined)
 			throw new UnauthorizedException('user is not login in account')
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...user } = resultUser as CreateAuthDto
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { acc_token, rf_token } = await this.generateTokens(resultUser)
+		this.setRfToCookies(res, rf_token)
 		return { ...user, acc_token }
 	}
 
-	async register(createUserDto: CreateAuthDto) {
+	async register(createUserDto: CreateAuthDto, res: Response) {
 		const userCheck = await this.user.existUser(createUserDto)
 		if (userCheck) throw new UnauthorizedException('user is has account')
 		const resultUser = await this.user.create(createUserDto)
@@ -29,22 +29,47 @@ export class AuthService {
 		const { password, ...user } = resultUser
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { acc_token, rf_token } = await this.generateTokens(resultUser)
-
+		this.setRfToCookies(res, rf_token)
 		return { ...user, acc_token }
-		// return undefined
 	}
 
-	async logout() {
-		return
+	async logout(req: Request, res?: Response) {
+		const { id } = req.user! as any
+		console.log(id)
+		this.eraseToken(req, res)
+		return await this.user.remove(id)
 	}
+
 	private async generateTokens(payload: CreateAuthDto | any) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...rest } = payload as CreateAuthDto
 		const tokens = [
-			{ rf_token: await this.jwt.signAsync(rest) },
-			{ acc_token: await this.jwt.signAsync(rest) },
+			{ rf_token: await this.jwt.signAsync(rest, { expiresIn: '60s' }) },
+			{ acc_token: await this.jwt.signAsync(rest, { expiresIn: '1m' }) },
 		]
 		const result = { ...tokens[1], ...tokens[0] }
 		return result
+	}
+
+	private async eraseToken(req: Request, res?: Response) {
+		const rf_token = this.TakeTokenFromCookies(req)
+		res?.cookie(rf_token.nameToken, '', { httpOnly: false })
+	}
+
+	private setRfToCookies(res: Response, rf_token: string | undefined) {
+		if (rf_token === undefined || rf_token === null)
+			throw new UnauthorizedException('rf_token is not defined')
+		res.cookie('rf_token', rf_token, { httpOnly: true })
+	}
+
+	private TakeTokenFromCookies(req: Request) {
+		let rfTokenFromCookies: string = ''
+		if (req.headers.cookie !== undefined)
+			rfTokenFromCookies = req.headers.cookie
+		const [nameToken, rfTokenFromCookiesResult] = rfTokenFromCookies.split(
+			'=',
+			2,
+		)
+		return { nameToken, rfTokenFromCookiesResult }
 	}
 }
