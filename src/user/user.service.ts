@@ -8,9 +8,6 @@ export class UserService {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async create(createUserDto: CreateUserDto) {
-		const user = await this.existUser(createUserDto.id)
-		if (user) throw new BadRequestException('user is also exist')
-
 		return this.prisma.user.create({
 			data: createUserDto,
 		})
@@ -26,7 +23,7 @@ export class UserService {
 	}
 
 	async update(id: string, updateUserDto: UpdateUserDto) {
-		const user = await this.existUser(id)
+		const user = await this.existUser({ id })
 		if (!user || user === null || user === undefined)
 			throw new BadRequestException('user is not exist')
 
@@ -37,7 +34,7 @@ export class UserService {
 	}
 
 	async remove(id: string) {
-		const user = await this.existUser(id)
+		const user = await this.existUser({ id })
 		if (!user || user === null || user === undefined)
 			throw new BadRequestException('user is not exist')
 
@@ -45,10 +42,15 @@ export class UserService {
 			where: { id },
 		})
 	}
-
-	private async existUser(id: string) {
+	async existUser(createUserDto: UpdateUserDto) {
 		return await this.prisma.user.findFirst({
-			where: { id },
+			where: {
+				OR: [
+					{ id: createUserDto.id },
+					{ email: createUserDto.email },
+					{ password: createUserDto.password },
+				],
+			},
 		})
 	}
 }
