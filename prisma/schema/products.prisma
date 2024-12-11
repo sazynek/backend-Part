@@ -15,5 +15,9 @@ model Products {
     productCollections   productsCollections @relation(fields: [productCollectionsId], references: [id])
     productCollectionsId String
 
+    @@index([praiseId])
+    @@index([statusProductId])
+    @@index([productCollectionsId])
+    @@index([userId])
     @@map("products")
 }
