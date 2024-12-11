@@ -1,7 +1,6 @@
 import {
 	IsEmail,
 	IsNotEmpty,
-	IsNumber,
 	IsOptional,
 	IsString,
 	IsStrongPassword,
@@ -10,8 +9,8 @@ import {
 
 export class CreateUserDto {
 	@IsOptional()
-	@IsNumber()
-	id: number
+	@IsString()
+	id: string
 
 	@IsNotEmpty()
 	@IsString()

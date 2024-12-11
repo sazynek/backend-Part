@@ -1,5 +1,5 @@
-enum Status{
-"Healthy",
-"Trending",
-"Supreme",
+enum Status {
+	'Healthy',
+	'Trending',
+	'Supreme',
 }

@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { PrismaService } from '../prismaControl/prisma.service'
 
 @Injectable()
 export class UserService {
-	create(createUserDto: CreateUserDto) {
-		return 'This action adds a new user'
+	constructor(private readonly prisma: PrismaService) {}
+
+	async create(createUserDto: CreateUserDto) {
+		const user = await this.existUser(createUserDto.id)
+		if (user) throw new BadRequestException('user is also exist')
+
+		return this.prisma.user.create({
+			data: createUserDto,
+		})
 	}
 
 	findAll() {
-		return `This action returns all user`
+		return this.prisma.user.findMany()
+	}
+	findOne(id: string) {
+		return this.prisma.user.findUnique({
+			where: { id },
+		})
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} user`
+	async update(id: string, updateUserDto: UpdateUserDto) {
+		const user = await this.existUser(id)
+		if (!user || user === null || user === undefined)
+			throw new BadRequestException('user is not exist')
+
+		return this.prisma.user.update({
+			where: { id },
+			data: updateUserDto,
+		})
 	}
 
-	update(id: number, updateUserDto: UpdateUserDto) {
-		return `This action updates a #${id} user`
+	async remove(id: string) {
+		const user = await this.existUser(id)
+		if (!user || user === null || user === undefined)
+			throw new BadRequestException('user is not exist')
+
+		return this.prisma.user.delete({
+			where: { id },
+		})
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} user`
+	private async existUser(id: string) {
+		return await this.prisma.user.findFirst({
+			where: { id },
+		})
 	}
 }
