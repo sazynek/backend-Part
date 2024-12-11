@@ -35,9 +35,19 @@ export class AuthService {
 
 	async logout(req: Request, res?: Response) {
 		const { id } = req.user! as any
-		console.log(id)
+		// console.log(id)
 		this.eraseToken(req, res)
 		return await this.user.remove(id)
+	}
+
+	async refresh(req: Request, res: Response) {
+		const { id } = req.user! as any
+		const user = await this.user.findOne(id)
+		if (!user || user === undefined || user === null)
+			throw new UnauthorizedException('user is not login in account')
+		const { acc_token, rf_token } = await this.generateTokens(user)
+		this.setRfToCookies(res, rf_token)
+		return { ...user, acc_token }
 	}
 
 	private async generateTokens(payload: CreateAuthDto | any) {
@@ -64,7 +74,7 @@ export class AuthService {
 
 	private TakeTokenFromCookies(req: Request) {
 		let rfTokenFromCookies: string = ''
-		if (req.headers.cookie !== undefined)
+		if (req.headers.cookie !== undefined || req.headers.cookie === null)
 			rfTokenFromCookies = req.headers.cookie
 		const [nameToken, rfTokenFromCookiesResult] = rfTokenFromCookies.split(
 			'=',
