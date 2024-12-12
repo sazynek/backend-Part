@@ -25,7 +25,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 		})
 	}
 	static ExtractJwtFromCookies(req: Request) {
-		console.log(req.cookies['acc_token'])
 		if (req.cookies['acc_token']) return req.cookies['acc_token']
 		else throw new UnauthorizedException("you don't have acc_token")
 	}

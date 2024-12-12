@@ -70,15 +70,4 @@ export class AuthService {
 			throw new UnauthorizedException('rf_token is not defined')
 		res.cookie(RF_TOKEN, rf_token, { httpOnly: true })
 	}
-
-	// private TakeTokenFromCookies(req: Request) {
-	// 	let rfTokenFromCookies: string = ''
-	// 	if (req.headers.cookie !== undefined || req.headers.cookie === null)
-	// 		rfTokenFromCookies = req.headers.cookie
-	// 	const [nameToken, rfTokenFromCookiesResult] = rfTokenFromCookies.split(
-	// 		'=',
-	// 		2,
-	// 	)
-	// 	return { nameToken, rfTokenFromCookiesResult }
-	// }
 }

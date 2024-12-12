@@ -10,7 +10,7 @@ import {
 export class CreateUserDto {
 	@IsOptional()
 	@IsString()
-	id: string
+	id?: string
 
 	@IsNotEmpty()
 	@IsString()
@@ -25,16 +25,16 @@ export class CreateUserDto {
 
 	@IsOptional()
 	@IsString()
-	name: string
+	name?: string
 
 	@IsOptional()
-	supportComment: string
-
-	@IsOptional()
-	@IsString()
-	updatedAt: Date
+	supportComment?: string
 
 	@IsOptional()
 	@IsString()
-	createdAt: Date
+	updatedAt?: Date
+
+	@IsOptional()
+	@IsString()
+	createdAt?: Date
 }

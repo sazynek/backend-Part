@@ -1,12 +1,10 @@
 model Statistic {
-    id       String @id @default(uuid())
-    email    String @unique
-    password String @unique
-    name     String
-
-    supportComment String?
-    updatedAt      DateTime @updatedAt @map("updated_at")
-    createdAt      DateTime @default(now()) @map("created_at")
+    id        String   @id @default(uuid())
+    cost      Int?
+    popular   String?
+    quality   String?
+    updatedAt DateTime @updatedAt @map("updated_at")
+    createdAt DateTime @default(now()) @map("created_at")
 
     @@map("statistic")
 }

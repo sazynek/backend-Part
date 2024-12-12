@@ -31,7 +31,7 @@ export class AuthController {
 	logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		return this.authService.logout(req, res)
 	}
-	
+
 	@UseGuards(JwtAuthGuardRf)
 	@Post('refresh_token')
 	refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
