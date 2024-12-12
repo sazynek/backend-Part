@@ -1,26 +1,42 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { CreateCommentDto } from './dto/create-comment.dto'
-import { UpdateCommentDto } from './dto/update-comment.dto'
+
+import { Request } from 'express'
+import { PrismaService } from '../prismaControl/prisma.service'
 
 @Injectable()
 export class CommentsService {
-	create(createCommentDto: CreateCommentDto) {
-		return 'This action adds a new comment'
+	constructor(private readonly prisma: PrismaService) {}
+	create(req: Request, createCommentDto: CreateCommentDto) {
+		const { id } = req.user as any
+		return this.prisma.comments.create({
+			data: createCommentDto,
+			include: {
+				user: {
+					where: { id },
+				},
+			},
+		})
 	}
 
 	findAll() {
-		return `This action returns all comments`
+		const comments = this.prisma.comments.findMany()
+		if (!comments || comments === undefined || comments === null)
+			throw new NotFoundException('you comments is not find')
+		return comments
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} comment`
-	}
-
-	update(id: number, updateCommentDto: UpdateCommentDto) {
-		return `This action updates a #${id} comment`
-	}
-
-	remove(id: number) {
-		return `This action removes a #${id} comment`
+	remove(req: Request) {
+		const { id } = req.user as any
+		const a = this.prisma.comments.findFirst({
+			where: {
+				user: {
+					id,
+				},
+			},
+		})
+		return this.prisma.comments.delete({
+			where: id,
+		})
 	}
 }

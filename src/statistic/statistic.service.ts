@@ -1,23 +1,30 @@
 import { Injectable } from '@nestjs/common'
-import { UpdateStatisticDto } from './dto/update-statistic.dto'
 import { CreateStatisticDto } from './dto/create-statistic.dto'
 import { PrismaService } from '../prismaControl/prisma.service'
 
 @Injectable()
 export class StatisticService {
 	constructor(private readonly prisma: PrismaService) {}
-	create(createStatisticDto: CreateStatisticDto) {
-		return this.prisma.statistic
-	}
-	findOne(id: number) {
-		return this.prisma.statistic
-	}
 
-	update(id: number, updateStatisticDto: UpdateStatisticDto) {
-		return this.prisma.statistic
+	findOne(id: string, createStatisticDto: CreateStatisticDto) {
+		return this.prisma.statistic.findFirst({
+			where: {
+				OR: [{ id }, { id: createStatisticDto.id }],
+			},
+			include: {
+				articles: true,
+				products: true,
+				user: true,
+			},
+		})
 	}
-
-	remove(id: number) {
-		return this.prisma.statistic
+	findAll() {
+		return this.prisma.statistic.findMany({
+			include: {
+				articles: true,
+				products: true,
+				user: true,
+			},
+		})
 	}
 }
