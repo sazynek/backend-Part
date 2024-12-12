@@ -10,14 +10,16 @@ export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('login')
-	login(
+	async login(
 		@Body() createAuthDto: CreateAuthDto,
 		@Res({ passthrough: true }) res: Response,
+		@Req() req: Request,
 	) {
+		console.log(await req.cookies['rf_token'], 'its rf token')
 		return this.authService.login(createAuthDto, res)
 	}
 	@Post('register')
-	register(
+	async register(
 		@Body() createAuthDto: CreateAuthDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
@@ -29,9 +31,10 @@ export class AuthController {
 	logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		return this.authService.logout(req, res)
 	}
+	
 	@UseGuards(JwtAuthGuardRf)
 	@Post('refresh_token')
-	refresh(@Req() req: Request, @Res() res: Response) {
+	refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		return this.authService.refresh(req, res)
 	}
 }

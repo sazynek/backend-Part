@@ -1,6 +1,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Request } from 'express'
 
 interface IJwt {
 	id?: string
@@ -17,11 +18,17 @@ interface IJwt {
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	constructor() {
 		super({
-			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+			jwtFromRequest: ExtractJwt.fromExtractors([
+				JwtStrategy.ExtractJwtFromCookies,
+			]),
 			secretOrKey: process.env.JWT_SECRET,
 		})
 	}
-
+	static ExtractJwtFromCookies(req: Request) {
+		console.log(req.cookies['acc_token'])
+		if (req.cookies['acc_token']) return req.cookies['acc_token']
+		else throw new UnauthorizedException("you don't have acc_token")
+	}
 	async validate(payload: IJwt) {
 		return payload
 	}

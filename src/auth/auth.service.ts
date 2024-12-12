@@ -3,7 +3,7 @@ import { CreateAuthDto } from './dto/create-auth.dto'
 import { UserService } from '../user/user.service'
 import { JwtService } from '@nestjs/jwt'
 import { Request, Response } from 'express'
-
+const RF_TOKEN = 'rf_token'
 @Injectable()
 export class AuthService {
 	constructor(
@@ -61,25 +61,24 @@ export class AuthService {
 		return result
 	}
 
-	private async eraseToken(req: Request, res?: Response) {
-		const rf_token = this.TakeTokenFromCookies(req)
-		res?.cookie(rf_token.nameToken, '', { httpOnly: false })
+	private async eraseToken(req?: Request, res?: Response) {
+		res?.cookie(RF_TOKEN, '', { httpOnly: false })
 	}
 
 	private setRfToCookies(res: Response, rf_token: string | undefined) {
 		if (rf_token === undefined || rf_token === null)
 			throw new UnauthorizedException('rf_token is not defined')
-		res.cookie('rf_token', rf_token, { httpOnly: true })
+		res.cookie(RF_TOKEN, rf_token, { httpOnly: true })
 	}
 
-	private TakeTokenFromCookies(req: Request) {
-		let rfTokenFromCookies: string = ''
-		if (req.headers.cookie !== undefined || req.headers.cookie === null)
-			rfTokenFromCookies = req.headers.cookie
-		const [nameToken, rfTokenFromCookiesResult] = rfTokenFromCookies.split(
-			'=',
-			2,
-		)
-		return { nameToken, rfTokenFromCookiesResult }
-	}
+	// private TakeTokenFromCookies(req: Request) {
+	// 	let rfTokenFromCookies: string = ''
+	// 	if (req.headers.cookie !== undefined || req.headers.cookie === null)
+	// 		rfTokenFromCookies = req.headers.cookie
+	// 	const [nameToken, rfTokenFromCookiesResult] = rfTokenFromCookies.split(
+	// 		'=',
+	// 		2,
+	// 	)
+	// 	return { nameToken, rfTokenFromCookiesResult }
+	// }
 }
