@@ -1,11 +1,14 @@
 model Categories {
-    id                String @id @default(uuid())
-    productCategories String @unique
-
-    supportComment String?
-    updatedAt      DateTime   @updatedAt @map("updated_at")
-    createdAt      DateTime   @default(now()) @map("created_at")
-    Products       Products[]
+    id                String                @id @default(uuid())
+    productCategories EnumProductCategories @unique
+    updatedAt         DateTime              @updatedAt @map("updated_at")
+    createdAt         DateTime              @default(now()) @map("created_at")
+    Products          Products[]
 
     @@map("categories")
+}
+
+enum EnumProductCategories {
+    chicken
+    chicken_with_vegetables
 }

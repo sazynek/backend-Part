@@ -1,6 +1,6 @@
 model statusProducts {
     id        String     @id @default(uuid())
-    famous    String
+    famous    EnumStatus
     rating    String
     userLike  Boolean?
     updatedAt DateTime   @updatedAt @map("updated_at")
@@ -8,4 +8,10 @@ model statusProducts {
     Products  Products[]
 
     @@map("status_products")
+}
+
+enum EnumStatus {
+    Healthy
+    Trending
+    Supreme
 }
