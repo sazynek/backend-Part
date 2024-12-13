@@ -9,12 +9,12 @@ export class CreateStatusProductDto {
 	@IsString()
 	@IsNotEmpty()
 	@MinLength(1)
-	famous: EnumStatus
+	famous?: EnumStatus
 
 	@IsString()
 	@IsNotEmpty()
 	@MinLength(1)
-	rating: string
+	rating?: string
 
 	@IsOptional()
 	@IsString()

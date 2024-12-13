@@ -1,10 +1,10 @@
 model statusProducts {
-    id        String     @id @default(uuid())
-    famous    EnumStatus
-    rating    String
+    id        String      @id @default(uuid())
+    famous    EnumStatus? 
+    rating    String?
     userLike  Boolean?
-    updatedAt DateTime   @updatedAt @map("updated_at")
-    createdAt DateTime   @default(now()) @map("created_at")
+    updatedAt DateTime    @updatedAt @map("updated_at")
+    createdAt DateTime    @default(now()) @map("created_at")
     Products  Products[]
 
     @@map("status_products")
