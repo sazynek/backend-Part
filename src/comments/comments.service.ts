@@ -7,10 +7,10 @@ import { PrismaService } from '../prismaControl/prisma.service'
 @Injectable()
 export class CommentsService {
 	constructor(private readonly prisma: PrismaService) {}
-	create(req: Request, createCommentDto: CreateCommentDto) {
+	async create(req: Request, createCommentDto: CreateCommentDto) {
 		const { id } = req.user as any
-		return this.prisma.comments.create({
-			data: createCommentDto,
+		return await this.prisma.comments.create({
+			data: { ...createCommentDto, userId: id },
 			include: {
 				user: {
 					where: { id },
@@ -19,24 +19,21 @@ export class CommentsService {
 		})
 	}
 
-	findAll() {
-		const comments = this.prisma.comments.findMany()
+	async findAll() {
+		const comments = await this.prisma.comments.findMany()
 		if (!comments || comments === undefined || comments === null)
 			throw new NotFoundException('you comments is not find')
 		return comments
 	}
 
-	remove(req: Request) {
-		const { id } = req.user as any
-		const a = this.prisma.comments.findFirst({
-			where: {
-				user: {
-					id,
-				},
-			},
-		})
-		return this.prisma.comments.delete({
-			where: id,
+	async remove(req: Request, id: string) {
+		const { id: userId } = req?.user as any
+		console.log(userId, '---id is equal')
+		if (userId === undefined || userId === null)
+			throw new NotFoundException('you are not logged in')
+
+		return await this.prisma.comments.delete({
+			where: { id },
 		})
 	}
 }

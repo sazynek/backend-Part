@@ -3,14 +3,12 @@ import {
 	Get,
 	Post,
 	Body,
-	Patch,
 	Param,
 	Delete,
 	Query,
 } from '@nestjs/common'
 import { ProductsService } from './products.service'
 import { CreateProductDto } from './dto/create-product.dto'
-import { UpdateProductDto } from './dto/update-product.dto'
 
 @Controller('products')
 export class ProductsController {
@@ -34,5 +32,11 @@ export class ProductsController {
 	@Delete(':id')
 	remove(@Param('id') id: string) {
 		return this.productsService.remove(id)
+	}
+
+	@Post('filter')
+	filter(@Query() query: any) {
+		
+		return this.productsService.filter(query)
 	}
 }

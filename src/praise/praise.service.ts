@@ -13,11 +13,11 @@ export class PraiseService {
 	}
 
 	findAll() {
-		return this.prisma.categories.findMany()
+		return this.prisma.praise.findMany()
 	}
 
 	remove(id: string) {
-		return this.prisma.categories.delete({
+		return this.prisma.praise.delete({
 			where: { id },
 		})
 	}

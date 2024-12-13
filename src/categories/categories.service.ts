@@ -6,18 +6,18 @@ import { PrismaService } from '../prismaControl/prisma.service'
 @Injectable()
 export class CategoriesService {
 	constructor(private readonly prisma: PrismaService) {}
-	create(createProductDto: CreateCategoryDto) {
-		return this.prisma.categories.create({
+	async create(createProductDto: CreateCategoryDto) {
+		return await this.prisma.categories.create({
 			data: createProductDto,
 		})
 	}
 
-	findAll() {
-		return this.prisma.categories.findMany()
+	async findAll() {
+		return await this.prisma.categories.findMany()
 	}
 
-	remove(id: string) {
-		return this.prisma.categories.delete({
+	async remove(id: string) {
+		return await this.prisma.categories.delete({
 			where: { id },
 		})
 	}

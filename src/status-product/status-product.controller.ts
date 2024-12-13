@@ -1,15 +1,6 @@
-import {
-	Controller,
-	Get,
-	Post,
-	Body,
-	Patch,
-	Param,
-	Delete,
-} from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common'
 import { StatusProductService } from './status-product.service'
 import { CreateStatusProductDto } from './dto/create-status-product.dto'
-import { UpdateStatusProductDto } from './dto/update-status-product.dto'
 
 @Controller('status-product')
 export class StatusProductController {

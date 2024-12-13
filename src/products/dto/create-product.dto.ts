@@ -35,4 +35,20 @@ export class CreateProductDto {
 	@IsOptional()
 	@IsString()
 	createdAt?: Date
+
+	@IsOptional()
+	@IsString()
+	praiseId?: string
+
+	@IsOptional()
+	@IsString()
+	productCollectionsId?: string
+
+	@IsOptional()
+	@IsString()
+	statusProductId?: string
+
+	@IsOptional()
+	@IsString()
+	userId?: string
 }

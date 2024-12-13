@@ -15,7 +15,7 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 		@Req() req: Request,
 	) {
-		console.log(await req.cookies['rf_token'], 'its rf token')
+		// console.log(await req.cookies['rf_token'], 'its rf token')
 		return this.authService.login(createAuthDto, res)
 	}
 	@Post('register')

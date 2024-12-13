@@ -20,7 +20,7 @@ export class CommentsController {
 
 	@UseGuards(JwtAuthGuard)
 	@Post()
-	create(@Req() req: Request, createCommentDto: CreateCommentDto) {
+	create(@Req() req: Request, @Body() createCommentDto: CreateCommentDto) {
 		return this.commentsService.create(req, createCommentDto)
 	}
 
@@ -30,8 +30,8 @@ export class CommentsController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Delete()
-	remove(@Req() req: Request) {
-		return this.commentsService.remove(req)
+	@Delete(':id')
+	remove(@Req() req: Request, @Param('id') id: string) {
+		return this.commentsService.remove(req, id)
 	}
 }

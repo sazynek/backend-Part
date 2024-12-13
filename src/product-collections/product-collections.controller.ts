@@ -18,17 +18,21 @@ export class ProductCollectionsController {
 	) {}
 
 	@Post()
-	create(@Body() createProductCollectionDto: CreateProductCollectionDto) {
-		return this.productCollectionsService.create(createProductCollectionDto)
+	async create(
+		@Body() createProductCollectionDto: CreateProductCollectionDto,
+	) {
+		return await this.productCollectionsService.create(
+			createProductCollectionDto,
+		)
 	}
 
 	@Get()
-	findAll() {
-		return this.productCollectionsService.findAll()
+	async findAll() {
+		return await this.productCollectionsService.findAll()
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.productCollectionsService.remove(id)
+	async remove(@Param('id') id: string) {
+		return await this.productCollectionsService.remove(id)
 	}
 }

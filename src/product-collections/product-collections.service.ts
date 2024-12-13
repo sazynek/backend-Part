@@ -12,12 +12,12 @@ export class ProductCollectionsService {
 	}
 
 	findAll() {
-		return this.prisma.categories.findMany()
+		return this.prisma.productsCollections.findMany()
 	}
 
 	remove(id: string) {
-		return this.prisma.categories.delete({
-			where: { id },
+		return this.prisma.productsCollections.delete({
+			where: { id},
 		})
 	}
 }
