@@ -1,18 +1,18 @@
 model Products {
-    id                   String              @id @default(uuid())
-    title                String
-    imgUrl               String
-    time                 String
-    updatedAt            DateTime            @updatedAt @map("updated_at")
-    createdAt            DateTime            @default(now()) @map("created_at")
-    user                 User?                @relation(fields: [userId], references: [id])
-    userId               String?
-    praise               Praise?              @relation(fields: [praiseId], references: [id])
-    praiseId             String
-    categories           Categories[]
-    statusProduct        statusProducts?      @relation(fields: [statusProductId], references: [id])
-    statusProductId      String
-    productCollections   productsCollections? @relation(fields: [productCollectionsId], references: [id])
+    id              String          @id @default(uuid())
+    title           String
+    imgUrl          String
+    time            String
+    updatedAt       DateTime        @updatedAt @map("updated_at")
+    createdAt       DateTime        @default(now()) @map("created_at")
+    user            User?           @relation(fields: [userId], references: [id])
+    userId          String?
+    praise          Praise?         @relation(fields: [praiseId], references: [id])
+    praiseId        String
+    categories      Categories[]
+    statusProduct   statusProducts? @relation(fields: [statusProductId], references: [id])
+    statusProductId String
+
     productCollectionsId String
     statistic            Statistic[]
 

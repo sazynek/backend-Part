@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Delete,
+	Query,
 } from '@nestjs/common'
 import { ArticlesService } from './articles.service'
 import { CreateArticleDto } from './dto/create-article.dto'
@@ -21,8 +22,8 @@ export class ArticlesController {
 	}
 
 	@Get()
-	findAll() {
-		return this.articlesService.findAll()
+	findAll(@Query('offset') offset: string) {
+		return this.articlesService.findAll(+offset)
 	}
 
 	@Delete(':id')

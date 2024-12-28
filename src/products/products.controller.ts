@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common'
 import { ProductsService } from './products.service'
 import { CreateProductDto } from './dto/create-product.dto'
+import { EnumProductCategories } from '@prisma/client'
 
 @Controller('products')
 export class ProductsController {
@@ -24,9 +25,21 @@ export class ProductsController {
 		return this.productsService.findAll()
 	}
 
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.productsService.findOne(id)
+	@Get('filter')
+	findByParams(
+		@Query()
+		query: {
+			search?: string
+			categ?: EnumProductCategories
+			praise?: string
+		},
+	) {
+		// console.log({...query,praise: +query?.praise!})
+
+		return this.productsService.findOne({
+			...query,
+			praise: +query?.praise!,
+		})
 	}
 
 	@Delete(':id')
@@ -36,7 +49,6 @@ export class ProductsController {
 
 	@Post('filter')
 	filter(@Query() query: any) {
-		
 		return this.productsService.filter(query)
 	}
 }

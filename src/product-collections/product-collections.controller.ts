@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Delete,
+	Query,
 } from '@nestjs/common'
 import { ProductCollectionsService } from './product-collections.service'
 import { CreateProductCollectionDto } from './dto/create-product-collection.dto'

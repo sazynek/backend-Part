@@ -1,4 +1,3 @@
-import { CreateArticleDto } from './../articles/dto/create-article.dto'
 import { JwtAuthGuard } from './../guards/accTokenStrategy/jwt.guard'
 import {
 	Controller,

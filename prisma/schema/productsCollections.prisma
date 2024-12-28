@@ -1,9 +1,19 @@
 model productsCollections {
-    id                 String     @id @default(uuid())
-    allProductsUserBuy String[]   @default([])
-    updatedAt          DateTime   @updatedAt @map("updated_at")
-    createdAt          DateTime   @default(now()) @map("created_at")
-    products           Products[]
+    id                 String   @id @default(uuid())
+    allProductsUserBuy String[] @default([])
+
+    alt       String?
+    cost      Int?
+    famous    String?
+    idProduct String?
+    imgUrl    String?
+    rating    String?
+    time      String?
+    title     String?
+    userLike  Boolean?
+
+    updatedAt DateTime @updatedAt @map("updated_at")
+    createdAt DateTime @default(now()) @map("created_at")
 
     @@map("products_collections")
 }

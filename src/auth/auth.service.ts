@@ -55,7 +55,7 @@ export class AuthService {
 		const { password, ...rest } = payload as CreateAuthDto
 		const tokens = [
 			{ rf_token: await this.jwt.signAsync(rest, { expiresIn: '60s' }) },
-			{ acc_token: await this.jwt.signAsync(rest, { expiresIn: '1m' }) },
+			{ acc_token: await this.jwt.signAsync(rest, { expiresIn: '1m30s' }) },
 		]
 		const result = { ...tokens[1], ...tokens[0] }
 		return result

@@ -5,8 +5,6 @@ import { CommentsModule } from './comments/comments.module'
 import { ProductsModule } from './products/products.module'
 import { AuthModule } from './auth/auth.module'
 import { StatisticModule } from './statistic/statistic.module'
-import { PrismaModule } from './prismaControl/prisma.module'
-import { PrismaService } from './prismaControl/prisma.service'
 import { CategoriesModule } from './categories/categories.module';
 import { PraiseModule } from './praise/praise.module';
 import { ProductCollectionsModule } from './product-collections/product-collections.module';

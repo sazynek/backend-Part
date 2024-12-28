@@ -17,7 +17,9 @@ export class ProductCollectionsService {
 
 	remove(id: string) {
 		return this.prisma.productsCollections.delete({
-			where: { id},
-		})
+			where: { id },
+			
+		},
+	)
 	}
 }
