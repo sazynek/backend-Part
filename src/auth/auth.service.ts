@@ -54,20 +54,32 @@ export class AuthService {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...rest } = payload as CreateAuthDto
 		const tokens = [
-			{ rf_token: await this.jwt.signAsync(rest, { expiresIn: '60s' }) },
-			{ acc_token: await this.jwt.signAsync(rest, { expiresIn: '1m30s' }) },
+			{ rf_token: await this.jwt.signAsync(rest, { expiresIn: 30 }) },
+			{ acc_token: await this.jwt.signAsync(rest, { expiresIn: 60 }) },
 		]
 		const result = { ...tokens[1], ...tokens[0] }
 		return result
 	}
 
 	private async eraseToken(req?: Request, res?: Response) {
-		res?.cookie(RF_TOKEN, '', { httpOnly: false })
+		res?.cookie(RF_TOKEN, '', {
+			httpOnly: true,
+			secure: true,
+			sameSite: true,
+			partitioned: true,
+			priority: 'high',
+		})
 	}
 
 	private setRfToCookies(res: Response, rf_token: string | undefined) {
 		if (rf_token === undefined || rf_token === null)
 			throw new UnauthorizedException('rf_token is not defined')
-		res.cookie(RF_TOKEN, rf_token, { httpOnly: true })
+		res.cookie(RF_TOKEN, rf_token, {
+			httpOnly: true,
+			secure: true,
+			sameSite: true,
+			partitioned: true,
+			priority: 'high',
+		})
 	}
 }
