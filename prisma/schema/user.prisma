@@ -11,6 +11,5 @@ model User {
     createdAt DateTime    @default(now()) @map("created_at")
     statistic Statistic[]
 
-
     @@map("user")
 }

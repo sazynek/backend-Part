@@ -54,7 +54,11 @@ export class AuthService {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...rest } = payload as CreateAuthDto
 		const tokens = [
-			{ rf_token: await this.jwt.signAsync(rest, { expiresIn: 30 }) },
+			{
+				rf_token: await this.jwt.signAsync(rest, {
+					expiresIn: 60 * 60,
+				}),
+			},
 			{ acc_token: await this.jwt.signAsync(rest, { expiresIn: 60 }) },
 		]
 		const result = { ...tokens[1], ...tokens[0] }

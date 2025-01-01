@@ -39,7 +39,8 @@ export class UserService {
 			throw new BadRequestException('user is not exist')
 
 		return this.prisma.user.delete({
-			where: { id },
+			where: { id:id },
+			include:{statistic:{}}
 		})
 	}
 	async existUser(createUserDto: UpdateUserDto) {
