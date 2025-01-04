@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module'
 import { JwtModule } from '@nestjs/jwt'
 import { JwtStrategy } from '../guards/accTokenStrategy/jwt.strategy'
 import { JwtStrategyRf } from '../guards/rfTokenStrategy/jwt.strategy'
+import { GoogleAuthGuard } from '../guards/google-strategy/google.guard'
 
 @Module({
 	imports: [
@@ -14,6 +15,6 @@ import { JwtStrategyRf } from '../guards/rfTokenStrategy/jwt.strategy'
 		}),
 	],
 	controllers: [AuthController],
-	providers: [AuthService, JwtStrategyRf, JwtStrategy],
+	providers: [AuthService, JwtStrategyRf, JwtStrategy, GoogleAuthGuard],
 })
 export class AuthModule {}

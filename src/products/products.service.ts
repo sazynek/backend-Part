@@ -143,6 +143,34 @@ export class ProductsService {
 			where: {
 				id: query.id,
 			},
+			orderBy: { createdAt: 'asc' },
+			include: {
+				categories: {
+					select: {
+						productCategories: true,
+					},
+				},
+				praise: {
+					select: {
+						cost: true,
+						praiseStatus: true,
+					},
+				},
+				statusProduct: {
+					select: {
+						famous: true,
+						rating: true,
+						userLike: true,
+					},
+				},
+				user: {
+					select: {
+						id: true,
+						name: true,
+						email: true,
+					},
+				},
+			},
 		})
 	}
 }

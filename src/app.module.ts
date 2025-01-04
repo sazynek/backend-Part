@@ -11,6 +11,7 @@ import { ProductCollectionsModule } from './product-collections/product-collecti
 import { StatusProductModule } from './status-product/status-product.module'
 import * as cookieParser from 'cookie-parser'
 import { AuthMiddleware } from './middleware/middleware'
+import { EmailModule } from './email/email.module';
 
 @Module({
 	imports: [
@@ -24,6 +25,7 @@ import { AuthMiddleware } from './middleware/middleware'
 		PraiseModule,
 		ProductCollectionsModule,
 		StatusProductModule,
+		EmailModule,
 	],
 	controllers: [],
 	providers: [],

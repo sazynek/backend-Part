@@ -1,9 +1,9 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { Request, Response } from 'express'
-import { JwtAuthGuard } from '../guards/accTokenStrategy/jwt.guard'
 import { JwtAuthGuardRf } from '../guards/rfTokenStrategy/jwt.guard'
+import { GoogleAuthGuard } from '../guards/google-strategy/google.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -36,5 +36,11 @@ export class AuthController {
 	@Post('refresh_token')
 	refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		return this.authService.refresh(req, res)
+	}
+
+	@UseGuards(GoogleAuthGuard)
+	@Get('google')
+	google(@Req()req:Request) {
+		return this.authService.googleLogin(req)
 	}
 }

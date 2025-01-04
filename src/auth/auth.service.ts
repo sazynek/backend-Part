@@ -49,6 +49,11 @@ export class AuthService {
 		this.setRfToCookies(res, rf_token)
 		return { ...user, acc_token }
 	}
+	async googleLogin(req: Request) {
+		console.log(req, 'google req')
+
+		return req.user
+	}
 
 	private async generateTokens(payload: CreateAuthDto | any) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
