@@ -7,10 +7,12 @@ import { MailerModule } from '@nestjs-modules/mailer'
 	imports: [
 		MailerModule.forRoot({
 			transport: {
-				host: process.env.EMAIL_HOST,
+				port: +process.env.GOOGLE_EMAIL_PORT!,
+				host: process.env.GOOGLE_EMAIL_HOST,
+				secure: false,
 				auth: {
-					user: process.env.EMAIL_USER!,
-					pass: process.env.EMAIL_PASSWORD!,
+					user: process.env.GOOGLE_EMAIL_USER,
+					pass: process.env.GOOGLE_EMAIL_PASS,
 				},
 			},
 		}),

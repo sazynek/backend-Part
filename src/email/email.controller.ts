@@ -1,4 +1,4 @@
-import { Controller, Get, Body } from '@nestjs/common'
+import { Controller, Get, Body, Post } from '@nestjs/common'
 import { EmailService } from './email.service'
 import { CreateEmailDto } from './dto/create-email.dto'
 
@@ -6,7 +6,7 @@ import { CreateEmailDto } from './dto/create-email.dto'
 export class EmailController {
 	constructor(private readonly emailService: EmailService) {}
 
-	@Get()
+	@Post()
 	create(@Body() createEmailDto: CreateEmailDto) {
 		return this.emailService.create(createEmailDto)
 	}
