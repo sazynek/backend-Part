@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Get,
+	Post,
+	Req,
+	Res,
+	UseGuards,
+} from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { Request, Response } from 'express'
@@ -16,31 +24,43 @@ export class AuthController {
 		@Req() req: Request,
 	) {
 		// console.log(await req.cookies['rf_token'], 'its rf token')
-		return this.authService.login(createAuthDto, res)
+		return await this.authService.login(createAuthDto, res)
 	}
 	@Post('register')
 	async register(
 		@Body() createAuthDto: CreateAuthDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		return this.authService.register(createAuthDto, res)
+		return await this.authService.register(createAuthDto, res)
 	}
 
 	@UseGuards(JwtAuthGuardRf)
 	@Post('logout')
-	logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-		return this.authService.logout(req, res)
+	async logout(
+		@Req() req: Request,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		return await this.authService.logout(req, res)
 	}
 
 	@UseGuards(JwtAuthGuardRf)
 	@Post('refresh_token')
-	refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-		return this.authService.refresh(req, res)
+	async refresh(
+		@Req() req: Request,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		return await this.authService.refresh(req, res)
 	}
 
 	@UseGuards(GoogleAuthGuard)
 	@Get('google')
-	google(@Req()req:Request) {
-		return this.authService.googleLogin(req)
+	google(@Req() req: Request) {}
+	@UseGuards(GoogleAuthGuard)
+	@Get('google/callback')
+	async googleCallback(
+		@Req() req: Request,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		return await this.authService.googleLogin(req, res)
 	}
 }

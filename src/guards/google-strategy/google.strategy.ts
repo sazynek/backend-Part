@@ -3,14 +3,14 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth20'
 import { Injectable } from '@nestjs/common'
 
 @Injectable()
-export class Google extends PassportStrategy(Strategy, 'google') {
+export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 	constructor() {
-		console.log('ah');
-		
+		console.log('google guard')
+
 		super({
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: process.env.CALLBACK_URL,
+			callbackURL: process.env.GOOGLE_CALLBACK_URL,
 			scope: ['email', 'profile'],
 		})
 	}
@@ -18,22 +18,20 @@ export class Google extends PassportStrategy(Strategy, 'google') {
 	async validate(
 		acc_token: string,
 		rf_token: string,
-		email: string,
 		profile: unknown,
 		done: VerifyCallback,
-	): Promise<unknown> {
-		console.log('bb');
-		//@ts-ignore
-		const { name, emails, photos } = profile
-		const user = {
-			email: emails[0].value,
-			firstName: name.givenName,
-			lastName: name.familyName,
-			picture: photos[0].value,
-			acc_token,
-		}
+	) {
+		if (profile) {
+			//@ts-ignore
+			const { name, emails, photos } = profile
+			const user = {
+				email: emails[0].value,
+				firstName: name.givenName,
+				lastName: name.familyName,
+				picture: photos[0].value,
+			}
 
-		console.log(user)
-		return
+			return user
+		}
 	}
 }

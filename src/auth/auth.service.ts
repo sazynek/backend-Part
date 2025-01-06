@@ -49,10 +49,21 @@ export class AuthService {
 		this.setRfToCookies(res, rf_token)
 		return { ...user, acc_token }
 	}
-	async googleLogin(req: Request) {
-		console.log(req, 'google req')
+	async googleLogin(req: Request, res: Response) {
+		if (!req.user) {
+			throw new UnauthorizedException('No user from google auth')
+		}
+		try {
+			const { acc_token, rf_token } = await this.generateTokens(req.user)
+			this.setRfToCookies(res, rf_token)
+			console.log({ ...req.user, acc_token })
 
-		return req.user
+			return { ...req.user, acc_token }
+		} catch (e) {
+			throw new UnauthorizedException('No user from google auth', {
+				cause: e,
+			})
+		}
 	}
 
 	private async generateTokens(payload: CreateAuthDto | any) {
@@ -71,8 +82,11 @@ export class AuthService {
 	}
 
 	private async eraseToken(req?: Request, res?: Response) {
+		const time = new Date()
+
 		res?.cookie(RF_TOKEN, '', {
 			httpOnly: true,
+			expires: time,
 			secure: true,
 			sameSite: true,
 			partitioned: true,
@@ -81,14 +95,21 @@ export class AuthService {
 	}
 
 	private setRfToCookies(res: Response, rf_token: string | undefined) {
+		const time = this.DateFunc()
+
 		if (rf_token === undefined || rf_token === null)
 			throw new UnauthorizedException('rf_token is not defined')
 		res.cookie(RF_TOKEN, rf_token, {
 			httpOnly: true,
+			expires: time,
 			secure: true,
 			sameSite: true,
 			partitioned: true,
 			priority: 'high',
 		})
+	}
+	private DateFunc() {
+		const myDate = new Date(2050, 2, 3, 5, 1, 3, 4)
+		return myDate
 	}
 }
