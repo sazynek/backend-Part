@@ -7,25 +7,24 @@ import {
 	MinLength,
 } from 'class-validator'
 
-export class CreateAuthDto {
+export class CreateUserGoogleDto {
 	@IsOptional()
 	@IsString()
-	id: string
+	id?: string
 
 	@IsNotEmpty()
 	@IsString()
 	@MinLength(1)
 	@IsEmail({}, { message: 'Not a Email' })
 	email: string
-
-	@IsNotEmpty()
+	
+	@IsOptional()
 	@IsString()
-	@IsStrongPassword({}, { message: 'Is not good password' })
-	password: string
+	password?: string
 
 	@IsOptional()
 	@IsString()
-	name: string
+	name?: string
 
 	@IsOptional()
 	supportComment?: string

@@ -3,6 +3,7 @@ import { CreateAuthDto } from './dto/create-auth.dto'
 import { UserService } from '../user/user.service'
 import { JwtService } from '@nestjs/jwt'
 import { Request, Response } from 'express'
+import { CreateUserGoogleDto } from '../user/dto/create-user-google.dto.'
 const RF_TOKEN = 'rf_token'
 @Injectable()
 export class AuthService {
@@ -32,6 +33,34 @@ export class AuthService {
 		this.setRfToCookies(res, rf_token)
 		return { ...user, acc_token }
 	}
+	async registerGoogleWithoutPassword(
+		createUserDto: CreateUserGoogleDto,
+		res: Response,
+	) {
+		const userCheck = await this.user.existUser(createUserDto)
+		if (userCheck) {
+			const resultUser = await this.user.update(
+				userCheck.id,
+				createUserDto,
+			)
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { password, ...user } = resultUser
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { acc_token, rf_token } =
+				await this.generateTokens(resultUser)
+			this.setRfToCookies(res, rf_token)
+			return { ...user, acc_token }
+		} else {
+			const resultUser = await this.user.createFromGoogle(createUserDto)
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { password, ...user } = resultUser
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { acc_token, rf_token } =
+				await this.generateTokens(resultUser)
+			this.setRfToCookies(res, rf_token)
+			return { ...user, acc_token }
+		}
+	}
 
 	async logout(req: Request, res?: Response) {
 		const { id } = req.user! as any
@@ -49,16 +78,27 @@ export class AuthService {
 		this.setRfToCookies(res, rf_token)
 		return { ...user, acc_token }
 	}
-	async googleLogin(req: Request, res: Response) {
+	async googleLogin(
+		req: Request<{
+			email: string
+			name: string
+			picture?: string
+		}>,
+		res: Response,
+	) {
+		// console.log(req.user)
+
 		if (!req.user) {
 			throw new UnauthorizedException('No user from google auth')
 		}
 		try {
-			const { acc_token, rf_token } = await this.generateTokens(req.user)
-			this.setRfToCookies(res, rf_token)
-			console.log({ ...req.user, acc_token })
-
-			return { ...req.user, acc_token }
+			const { acc_token } = await this.registerGoogleWithoutPassword(
+				//@ts-ignore
+				{ email: req.user.email, name: req.user.name },
+				res,
+			)
+			if (acc_token) res.redirect('http://localhost:3000/home')
+			else res.redirect('http://localhost:3000/login')
 		} catch (e) {
 			throw new UnauthorizedException('No user from google auth', {
 				cause: e,
