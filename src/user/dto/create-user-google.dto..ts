@@ -17,7 +17,7 @@ export class CreateUserGoogleDto {
 	@MinLength(1)
 	@IsEmail({}, { message: 'Not a Email' })
 	email: string
-	
+
 	@IsOptional()
 	@IsString()
 	password?: string

@@ -30,11 +30,11 @@ export class CreateProductCollectionDto {
 
 	@IsString()
 	@IsOptional()
-	rating?: string 
+	rating?: string
 
 	@IsString()
 	@IsOptional()
-	time?: string 
+	time?: string
 
 	@IsString()
 	@IsOptional()

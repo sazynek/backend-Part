@@ -13,8 +13,9 @@ export class ArticlesService {
 
 	async findAll(offset: number) {
 		const offsetData = await this.prisma.articles.findMany()
-		if(!offsetData || offsetData===null || offsetData===undefined) throw new NotFoundException(`your articles is not found`)
-		const data=offsetData.slice(0,offset)
+		if (!offsetData || offsetData === null || offsetData === undefined)
+			throw new NotFoundException(`your articles is not found`)
+		const data = offsetData.slice(0, offset)
 		return data
 	}
 

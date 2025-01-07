@@ -1,7 +1,6 @@
 import { EnumProductCategories } from '@prisma/client'
 import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
 
-
 export class CreateCategoryDto {
 	@IsOptional()
 	@IsString()

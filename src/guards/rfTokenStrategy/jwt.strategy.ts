@@ -26,7 +26,12 @@ export class JwtStrategyRf extends PassportStrategy(Strategy, 'rf-jwt') {
 		})
 	}
 	static ExtractJwtFromCookies(req: Request) {
-		if (req.cookies['rf_token']) return req.cookies['rf_token']
+		if (
+			req.cookies['rf_token'] &&
+			//@ts-ignore
+			req.cookies['rf_token'] !== ('undefined' || undefined)
+		)
+			return req.cookies['rf_token']
 		else throw new UnauthorizedException("you don't have rf_token")
 	}
 	async validate(payload: IJwt) {
